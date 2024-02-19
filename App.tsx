@@ -5,7 +5,7 @@ import {Text} from "react-native";
 const App = () => {
     return (
         <>
-            <Box><Text>jkdlfkl</Text></Box>
+            <Box></Box>
         </>
     );
 };
