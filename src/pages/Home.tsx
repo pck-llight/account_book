@@ -11,7 +11,7 @@ const Home = () => {
     StatusBar.setBackgroundColor("#EBF2F3");
     StatusBar.setBarStyle("dark-content");
 
-    const [currentAsset, setCurrentAsset]= useState<number>(0)
+    const [currentCash, setCurrentCash]= useState<number>(122223123123123123123123)
     
     return (
         <Screen>
@@ -23,8 +23,8 @@ const Home = () => {
             <MainContainer>
                 <TextCurrentAsset>나의 자산 현황</TextCurrentAsset>
                 <AssetsContainer>
-                    <CashCard title={"현금 자산 총액"} subtitle={"원"} onPress={()=>{
-                        console.log("")
+                    <CashCard title={"현금 자산 총액"} subtitle={currentCash+"원"} onPress={()=>{
+                        console.log("뭐야 왜 안돼")
                     }}/>
                 </AssetsContainer>
             </MainContainer>
