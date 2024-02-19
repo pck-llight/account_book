@@ -8,34 +8,33 @@ import DatePicker from 'react-native-date-picker'
 
 const AccountBookInput = () => {
     console.log("렌더링");
+
     //Date 모달 관련 상태
     const [date,setDate] = useState<Date>(new Date());
     const [open, setOpen] = useState(false)
 
-    const [typeState, setType] = useState<string>("수입");
+    //수입 지출
+    const [accountType, setType] = useState<string>("수입");
 
+    //현재 돈
     const [money,setMoney] = useState("");
 
 
     let secondInputQ;
     let thirdInputQ;
 
-    if(typeState=="수입") {
+    if(accountType=="수입") {
         secondInputQ = "언제의 수입인가요?";
-        thirdInputQ = "얼마만큼의 수입인가요?";
-    }
+        thirdInputQ = "얼마만큼의 수입인가요?";}
     else {
         secondInputQ = "언제의 지출인가요?";
-        thirdInputQ = "얼마만큼의 지출인가요?";
-    }
+        thirdInputQ = "얼마만큼의 지출인가요?";}
 
     const typeStateCallback = (title:string) => {
         setType(title);
     };
 
-
     const DataModal = () => {
-
         return (
             <>
                 <DatePicker
