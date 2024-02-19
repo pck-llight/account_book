@@ -1,47 +1,90 @@
 import 'react-native-gesture-handler';
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components/native";
-import ArrowIcon from "../assets/img/arrow_ios.svg"
-import {StatusBar} from "react-native"
-import CashCard from "../components/CashCard.tsx";
+import Header from "../components/Header.tsx";
+import AccountTypeButton from "../components/AccountTypeButton.tsx";
+import { Button } from 'react-native'
+import DatePicker from 'react-native-date-picker'
 
 const AccountBookInput = () => {
-    StatusBar.setTranslucent(false);
-    StatusBar.setBackgroundColor("#EBF2F3");
-    StatusBar.setBarStyle("dark-content");
+    console.log("렌더링");
+    //Date 모달 관련 상태
+    const [date,setDate] = useState<Date>(new Date());
+    const [open, setOpen] = useState(false)
 
-    const [currentCash, setCurrentCash] = useState<number>(123456789)
-    const [income, setIncome] = useState<number>(10000)
-    const [expend, setExpend] = useState<number>(100)
+    const [typeState, setType] = useState<string>("수입");
 
-    useEffect(()=>{
-        setCurrentCash(income-expend)
-    }, [income, expend])
+    const [money,setMoney] = useState("");
+
+
+    let secondInputQ;
+    let thirdInputQ;
+
+    if(typeState=="수입") {
+        secondInputQ = "언제의 수입인가요?";
+        thirdInputQ = "얼마만큼의 수입인가요?";
+    }
+    else {
+        secondInputQ = "언제의 지출인가요?";
+        thirdInputQ = "얼마만큼의 지출인가요?";
+    }
+
+    const typeStateCallback = (title:string) => {
+        setType(title);
+    };
+
+
+    const DataModal = () => {
+
+        return (
+            <>
+                <DatePicker
+                    modal
+                    mode="date"
+                    open={open}
+                    date={date}
+                    onConfirm={(date) => {
+                        setOpen(false)
+                        setDate(date)
+                    }}
+                    onCancel={() => {
+                        setOpen(false)
+                    }}
+                />
+            </>
+        )
+    }
+
+    const DateInput = () => {
+      return(
+          <DateInputBox onPress={()=>{setOpen(true)}}>
+              <DateText>{date.getFullYear()}</DateText>
+              <DateText>{date.getMonth() + 1}</DateText>
+              <DateText>{date.getDate()}</DateText>
+          </DateInputBox>
+      );
+    };
+
 
     return (
         <Screen>
-
-            <Header>
-                <ArrowIcon/>
-                <ScreenTitle>가계부 이름을 입력하세요</ScreenTitle>
-                <EmtpyView/>
-            </Header>
-
+            <Header title={"수입/지출 입력"}/>
             <MainContainer>
-                <TextCurrentAsset>나의 자산 현황</TextCurrentAsset>
-                <AssetsContainer>
-                    <CashCard title={"현금 자산 총액"} subtitle={currentCash + "원"} subtitleColor={"#000"} onPress={() => {
-                        console.log("뭐야 왜 돼")
-                    }}/>
-                    <IncomeAndOutputContainer>
-                        <CashCard title={"이번 달 총 수입"} subtitle={income + "원"} subtitleColor={"#F6453A"} onPress={()=>{
-                            console.log("왜 안돼")
-                        }}/>
-                        <CashCard title={"이번 달 총 지출"} subtitle={expend + "원"} subtitleColor={"#385FEA"} onPress={()=>{
-                            console.log("왜 안돼")
-                        }}/>
-                    </IncomeAndOutputContainer>
-                </AssetsContainer>
+                <InputListCard>
+                    <InputContainer>
+                        <InputTitle>수입인가요? 지출인가요?</InputTitle>
+                        <AccountTypeButton stateCallback={typeStateCallback}/>
+                    </InputContainer>
+                    <InputContainer>
+                        <InputTitle>{secondInputQ}</InputTitle>
+                        <DateInput/>
+                    </InputContainer>
+                    <InputContainer>
+                        <InputTitle>{thirdInputQ}</InputTitle>
+                        <MoneyInputBox value={money} placeholder="원화 단위로 값을 입력하세요" onChangeText={(text) => setMoney(text)}/>
+                    </InputContainer>
+                </InputListCard>
+                <DataModal/>
             </MainContainer>
         </Screen>
     );
@@ -55,77 +98,86 @@ const Screen = styled.View`
   background-color: #EBF2F3;
 `
 
-const Header = styled.View`
-  width: 100%;
-  height: 30px;
+const InputContainer = styled.View`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
 `;
 
-const EmtpyView = styled.View`
-  width: 24px;
-  height: 24px;
-`;
-
-const ScreenTitle = styled.Text`
-  color: #232627;
+const InputTitle = styled.Text`
+  color: #3F4446;
+  text-align: center;
   font-family: SUIT;
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
-  line-height: normal;
-  letter-spacing: -0.408px;
- //position: absolute;
+  line-height: 16px; /* 114.286% */
+`
+
+const InputListCard = styled.View`
+  display: flex;
+  width: 100%;
+  padding: 43px 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 200px;
+  gap: 40px;
+
+  border-radius: 8px;
+  background: #FAFAFA;
+`
+
+const DateInputBox = styled.TouchableOpacity`
+  display: flex;
+  height: 46px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  align-self: stretch;
+  border-radius: 6px;
+  border: 1px solid #EDEDED;
+  background: #F5F5F5;
+  flex-direction: row;
 `;
 
-const ArrowIconComponent = styled.View`
-  width: 24px; height: 24px;
-`
-
-const BtnEditBookName = styled.TouchableOpacity`
-  width: 14px;
-  height: 14px;
-  margin-left: 6px;
+const MoneyInputBox = styled.TextInput`
   display: flex;
-`
+  height: 46px;
+  justify-content: center;
+  align-self: stretch;
+  border-radius: 6px;
+  border: 1px solid #EDEDED;
+  background: #F5F5F5;
+  flex-direction: row;
+  text-align-vertical: center;
+  text-align: center; /* 수정된 부분 */
+`;
+
+const DateText = styled.Text`
+  color: #525759;
+  text-align: center;
+  font-family: SUIT;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+
+  letter-spacing: -0.4px;`
 
 const MainContainer = styled.View`
   display: flex;
   width: 100%;
-  height: auto;
+  height: 100%;
+  padding: 16px 0px;
   flex-direction: column;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
   gap: 20px;
+  flex-shrink: 0;
 `
 
-const TextCurrentAsset = styled.Text`
-  font-size: 16px;
-  font-family: SUIT;
-  font-weight: 700;
-  color: #232627;
-  margin-top: 20px;
-  margin-left: 10px;
-`
 
-const AssetsContainer = styled.View`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  align-self: stretch;
-  
-`
 
-const IncomeAndOutputContainer = styled.View`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  align-self: stretch;
-  flex-direction: row;
-  width: 100%;
-`
 export default AccountBookInput;
