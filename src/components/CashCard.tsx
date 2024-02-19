@@ -30,7 +30,7 @@ const ButtonContainer = styled.TouchableOpacity`
   align-self: stretch;
   border-radius: 8px;
   background: #fff;
-  width: 100%;
+  //width: 100%;
 `
 
 const TitleContainer = styled.View`

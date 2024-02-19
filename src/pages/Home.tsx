@@ -3,7 +3,7 @@
     import styled from "styled-components/native";
     import Wallet_icon from "../assets/img/Wallet_icon.svg"
     import Edit_icon from "../assets/img/Edit_square.svg"
-    import {StatusBar} from "react-native"
+    import {Button, StatusBar, Text} from "react-native"
     import CashCard from "../components/CashCard.tsx";
 
     const Home = () => {
@@ -12,8 +12,8 @@
         StatusBar.setBarStyle("dark-content");
 
         const [currentCash, setCurrentCash] = useState<number>(123456789)
-        const [income, setIncome] = useState<number>(10000)
-        const [expend, setExpend] = useState<number>(100)
+        const [income, setIncome] = useState<number>(0)
+        const [expend, setExpend] = useState<number>(0)
 
         useEffect(()=>{
             setCurrentCash(income-expend)
@@ -28,26 +28,28 @@
                 </TopBar>
                 <MainContainer>
                     <TextCurrentAsset>나의 자산 현황</TextCurrentAsset>
-                    <AssetsContainer>
+                    <CashContainer>
                         <CashCard title={"현금 자산 총액"} subtitle={currentCash + "원"} subtitleColor={"#000"} onPress={() => {
                             console.log("뭐야 왜 돼")
                         }}/>
                         <IncomeAndOutputContainer>
                             <CashCard title={"이번 달 총 수입"} subtitle={income + "원"} subtitleColor={"#F6453A"} onPress={()=>{
                                 console.log("왜 안돼")
+                                setIncome( income + 100)
                             }}/>
                             <CashCard title={"이번 달 총 지출"} subtitle={expend + "원"} subtitleColor={"#385FEA"} onPress={()=>{
                                 console.log("왜 안돼")
+                                setExpend( expend + 100)
                             }}/>
                         </IncomeAndOutputContainer>
-                    </AssetsContainer>
+                    </CashContainer>
                 </MainContainer>
             </Screen>
         );
     };
     const Screen = styled.View`
       height: 100%;
-      width: 100%;
+      width: 100vw;
       display: flex;
       //justify-content: center;
       padding: 11px 20px;
@@ -93,23 +95,24 @@
       margin-left: 10px;
     `
 
-    const AssetsContainer = styled.View`
+    const CashContainer = styled.View`
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 10px;
       align-self: stretch;
-      
     `
 
     const IncomeAndOutputContainer = styled.View`
+      width: 100%;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
       gap: 10px;
-      align-self: stretch;
+      align-self: center;
       flex-direction: row;
-      width: 100%;
+      
     `
     export default Home;
