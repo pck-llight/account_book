@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from "styled-components/native";
-import {Text} from "react-native";
+import {SafeAreaView} from "react-native";
+import Home from "./src/pages/Home.tsx";
 
 const App = () => {
     return (
-        <>
-            <Box></Box>
-        </>
+        <SafeAreaView>
+            <Home/> 
+        </SafeAreaView>
     );
 };
 

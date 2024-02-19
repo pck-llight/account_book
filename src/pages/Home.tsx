@@ -7,7 +7,7 @@
     import CashCard from "../components/CashCard.tsx";
 
     const Home = () => {
-        StatusBar.setTranslucent(false);
+        //StatusBar.setTranslucent(false);
         StatusBar.setBackgroundColor("#EBF2F3");
         StatusBar.setBarStyle("dark-content");
 
