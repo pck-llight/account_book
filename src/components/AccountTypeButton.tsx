@@ -71,7 +71,6 @@ const ButtonText = styled.Text`
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
-  line-height: 12px; /* 100% */
   letter-spacing: -0.4px;
 `;
 

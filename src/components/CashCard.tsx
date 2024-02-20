@@ -6,14 +6,20 @@ interface ButtonProps {
     subtitleColor: string;
     onPress: () => void;
     disabled?: boolean;
+    full?:boolean;
+    iconVisible?:boolean;
 }
 
-const CashCard = ({title, subtitle, subtitleColor, onPress, disabled}:ButtonProps) => {
+const CashCard = ({title, subtitle, subtitleColor, onPress, disabled, full, iconVisible}:ButtonProps) => {
+
     return (
-        <ButtonContainer onPress={onPress}>
+        <ButtonContainer style={{
+            flex: full ? 0 : 1,
+            padding: 16,
+        }} onPress={onPress}>
             <TitleContainer>
                 <Title>{title}</Title>
-                <Enter_icon width={10} height={10}/>
+                { iconVisible && <Enter_icon width={10} height={10}/> }
             </TitleContainer>
             <SubTitle style={{color:subtitleColor}}>{subtitle}</SubTitle>
         </ButtonContainer>
@@ -21,16 +27,13 @@ const CashCard = ({title, subtitle, subtitleColor, onPress, disabled}:ButtonProp
 };
 
 const ButtonContainer = styled.TouchableOpacity`
-  display: flex;
-  padding: 14px 16px;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 8px;
-  align-self: stretch;
+  gap: 16px;
   border-radius: 8px;
-  background: #fff;
-  //width: 100%;
+  background: #212632;
+  align-self: stretch;
+  
 `
 
 const TitleContainer = styled.View`
@@ -47,7 +50,7 @@ const Title = styled.Text`
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
-  color: black;
+  color: #fff;
   font-family: SUIT;
   font-weight: 600;
   font-size: 12px;

@@ -39,7 +39,6 @@ const ScreenTitle = styled.Text`
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
-  line-height: normal;
   letter-spacing: -0.408px;
  //position: absolute;
 `;
