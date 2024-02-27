@@ -6,7 +6,7 @@ interface SectionProps {
     title: string,
     date: string,
     priceColor: string,
-    price: number,
+    price: string,
     isMinous?: boolean
 }
 

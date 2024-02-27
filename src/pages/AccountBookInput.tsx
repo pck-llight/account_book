@@ -6,7 +6,6 @@ import AccountTypeButton from "../components/AccountTypeButton.tsx";
 import DatePicker from 'react-native-date-picker'
 import {useNavigation} from "@react-navigation/native";
 import InputButton from "../components/InputButton.tsx";
-import Home from "./Home.tsx";
 
 const AccountBookInput = () => {
     const navigation = useNavigation();
@@ -75,7 +74,7 @@ const AccountBookInput = () => {
     return (
         <Screen>
             <Header title={"수입/지출 입력"} back={() => {
-                navigation.navigate(Home)
+                navigation.goBack()
             }}/>
             <MainContainer>
                 <InputListCard>
@@ -99,8 +98,9 @@ const AccountBookInput = () => {
                 </InputListCard>
                 <DataModal/>
                 <InputButton title={"수입 / 지출 입력"} onPress={() => {
-                    navigation.navigate(Home);
+                    navigation.goBack();
                     // 저장 하는 기능을 이제 추가 해서 여기에 넣어야 겠죠?그죠?그렇겠죠? 진짜네..
+                    // 입력이 올바른지 판별하는 것도 필요하겠죠?
                 }}/>
             </MainContainer>
         </Screen>

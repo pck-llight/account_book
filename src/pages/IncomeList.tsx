@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {SafeAreaView, ScrollView, Text, View} from "react-native";
 import Header from "../components/Header.tsx";
 import {useNavigation} from "@react-navigation/native";
-import Home from "./Home.tsx";
 import styled from "styled-components/native";
 import WholeCard from "../components/WholeCard.tsx";
 import Section from "../components/Section.tsx";
@@ -17,7 +16,7 @@ const IncomeList = () => {
             backgroundColor: "#1A1D25",
             paddingHorizontal: 20,
         }}>
-            <Header title={"이번 달 총 수입"} back={() => navigation.navigate(Home)}/>
+            <Header title={"이번 달 총 수입"} back={() => navigation.goBack()}/>
             <View style={{
                 flex: 1,
                 paddingVertical: 16,
@@ -28,7 +27,7 @@ const IncomeList = () => {
                     marginTop:16,
                 }}>
                     <Section title={"맥북사조"} date={day.getFullYear() + '.' + day.getMonth() + '.' + day.getDate()}
-                             priceColor={"#fff"} price={123123123123}/>
+                             priceColor={"#fff"} price={"123123123123"}/>
                 </ScrollView>
             </View>
         </SafeAreaView>
