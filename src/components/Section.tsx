@@ -1,16 +1,21 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components/native";
-import DatePicker from "react-native-date-picker";
 import {View} from "react-native";
 
 interface SectionProps {
-    title: String,
-    date?: DatePicker,
+    title: string,
+    date: string,
     priceColor: string,
     price: number,
+    isMinous?: boolean
 }
 
-const Section = ({title, date, priceColor, price}: SectionProps) => {
+const Section = ({title, date, priceColor, price, isMinous}: SectionProps) => {
+    const [priceOutput, setPriceOutput] = useState<String>(price.toLocaleString().toString())
+
+    useEffect(() => {
+        setPriceOutput(price.toLocaleString())
+    }, [price]);
     return (
         <View style={{
             // flex: 1,
@@ -23,11 +28,12 @@ const Section = ({title, date, priceColor, price}: SectionProps) => {
                 flexDirection: "column",
                 alignItems: "flex-start",
                 gap: 6,
+                paddingVertical:14,
             }}>
                 <SectionTitle>{title}</SectionTitle>
                 <Date>{date}</Date>
             </View>
-            <Subtitle style={{color: priceColor}}>{price}</Subtitle>
+            <Subtitle style={{color: priceColor}}>{isMinous && "-"} {priceOutput}</Subtitle>
         </View>
 
     );

@@ -16,7 +16,7 @@ const CashCard = ({title, subtitle, subtitleColor, onPress, disabled, full, icon
         <ButtonContainer style={{
             flex: full ? 0 : 1,
             padding: 16,
-        }} onPress={onPress}>
+        }} onPress={onPress} disabled={disabled}>
             <TitleContainer>
                 <Title>{title}</Title>
                 { iconVisible && <Enter_icon width={10} height={10}/> }

@@ -12,7 +12,6 @@ const InputButton = ({title, onPress, disabled}: ButtonProps) => {
 const InputButtonContainer = styled.TouchableOpacity`
   display: flex;
   width: 100%;
-
   bottom: 20px;
   padding: 16px 0;
   justify-content: center;

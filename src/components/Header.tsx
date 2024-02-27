@@ -2,14 +2,17 @@ import styled from "styled-components/native";
 import Enter_icon from "../assets/img/arrow_back_ios.svg"
 import ArrowIcon from "../assets/img/arrow_ios.svg";
 import React from "react";
+import {NavigationProp, useNavigation} from "@react-navigation/native";
 interface HeaderProps {
     title: string;
+    back: ()=>void;
 }
 
-const Header = ({title}:HeaderProps) => {
+const Header = ({title, back}:HeaderProps) => {
+    const navigation = useNavigation()
     return (
         <HeaderContainer>
-            <ArrowIconComponent>
+            <ArrowIconComponent onPress={back}>
                 <ArrowIcon/>
             </ArrowIconComponent>
             <ScreenTitle>{title}</ScreenTitle>
@@ -34,13 +37,12 @@ const EmtpyView = styled.View`
 `;
 
 const ScreenTitle = styled.Text`
-  color: #232627;
+  color: #fff;
   font-family: SUIT;
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
   letter-spacing: -0.408px;
- //position: absolute;
 `;
 
 const ArrowIconComponent = styled.TouchableOpacity`

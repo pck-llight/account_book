@@ -15,7 +15,6 @@ const AccountTypeButton : React.FC<ButtonFieldProps> = ({ stateCallback }) => {
     const [buttonState, setState] = useState<string>("수입");
 
     const Button: React.FC<ButtonProps> = ({ title }) => {
-
         let buttonBackgroundColor; // 기본 배경색 설정
         let buttonTextColor; // 기본 텍스트 색 설정
 
@@ -26,15 +25,11 @@ const AccountTypeButton : React.FC<ButtonFieldProps> = ({ stateCallback }) => {
             buttonBackgroundColor = buttonState === "지출" ? "#5478F4" : "#CDD5F1";
             buttonTextColor = buttonState === "지출" ? "#FFF" : "#A3AAB6";
         }
-
-
-        const pressButton = () =>{
-            setState(title);
-            stateCallback(buttonState);
-        }
-
         return(
-            <ButtonContainer onPress={pressButton} style={{ backgroundColor: buttonBackgroundColor }} >
+            <ButtonContainer onPress={()=>{
+                stateCallback(title)
+                setState(title)
+            }} style={{ backgroundColor: buttonBackgroundColor }} >
                 <ButtonText style={{ color: buttonTextColor }}>
                     {title}
                 </ButtonText>

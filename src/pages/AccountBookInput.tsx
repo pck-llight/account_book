@@ -1,36 +1,39 @@
 import 'react-native-gesture-handler';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import styled from "styled-components/native";
 import Header from "../components/Header.tsx";
 import AccountTypeButton from "../components/AccountTypeButton.tsx";
-import { Button } from 'react-native'
 import DatePicker from 'react-native-date-picker'
+import {useNavigation} from "@react-navigation/native";
+import InputButton from "../components/InputButton.tsx";
+import Home from "./Home.tsx";
 
 const AccountBookInput = () => {
-    console.log("렌더링");
+    const navigation = useNavigation();
 
     //Date 모달 관련 상태
-    const [date,setDate] = useState<Date>(new Date());
+    const [date, setDate] = useState<Date>(new Date());
     const [open, setOpen] = useState(false)
 
     //수입 지출
     const [accountType, setType] = useState<string>("수입");
 
     //현재 돈
-    const [money,setMoney] = useState("");
+    const [money, setMoney] = useState("");
 
 
     let secondInputQ;
     let thirdInputQ;
 
-    if(accountType=="수입") {
+    if (accountType == "수입") {
         secondInputQ = "언제의 수입인가요?";
-        thirdInputQ = "얼마만큼의 수입인가요?";}
-    else {
+        thirdInputQ = "얼마만큼의 수입인가요?";
+    } else {
         secondInputQ = "언제의 지출인가요?";
-        thirdInputQ = "얼마만큼의 지출인가요?";}
+        thirdInputQ = "얼마만큼의 지출인가요?";
+    }
 
-    const typeStateCallback = (title:string) => {
+    const typeStateCallback = (title: string) => {
         setType(title);
     };
 
@@ -55,19 +58,25 @@ const AccountBookInput = () => {
     }
 
     const DateInput = () => {
-      return(
-          <DateInputBox onPress={()=>{setOpen(true)}}>
-              <DateText>{date.getFullYear()}</DateText>
-              <DateText>{date.getMonth() + 1}</DateText>
-              <DateText>{date.getDate()}</DateText>
-          </DateInputBox>
-      );
+        return (
+            <DateInputBox onPress={() => {
+                setOpen(true)
+            }}>
+                <DateText>{date.getFullYear()}</DateText>
+                <DateText>|</DateText>
+                <DateText>{date.getMonth() + 1}</DateText>
+                <DateText>|</DateText>
+                <DateText>{date.getDate()}</DateText>
+            </DateInputBox>
+        );
     };
 
 
     return (
         <Screen>
-            <Header title={"수입/지출 입력"}/>
+            <Header title={"수입/지출 입력"} back={() => {
+                navigation.navigate(Home)
+            }}/>
             <MainContainer>
                 <InputListCard>
                     <InputContainer>
@@ -80,10 +89,19 @@ const AccountBookInput = () => {
                     </InputContainer>
                     <InputContainer>
                         <InputTitle>{thirdInputQ}</InputTitle>
-                        <MoneyInputBox value={money} placeholder="원화 단위로 값을 입력하세요" onChangeText={(text) => setMoney(text)}/>
+                        <MoneyInputBox keyboardType={"numeric"} value={money}
+                                       placeholderTextColor={"rgba(255,255,255,0.31)"} placeholder="금액 입력"
+                                       onChangeText={(text) => {
+                                           const cleanedText = text.replace(/[^0-9]/g, '');
+                                           setMoney(cleanedText)
+                                       }}/>
                     </InputContainer>
                 </InputListCard>
                 <DataModal/>
+                <InputButton title={"수입 / 지출 입력"} onPress={() => {
+                    navigation.navigate(Home);
+                    // 저장 하는 기능을 이제 추가 해서 여기에 넣어야 겠죠?그죠?그렇겠죠? 진짜네..
+                }}/>
             </MainContainer>
         </Screen>
     );
@@ -92,9 +110,8 @@ const Screen = styled.View`
   height: 100%;
   width: 100%;
   display: flex;
-  //justify-content: center;
   padding: 11px 20px;
-  background-color: #EBF2F3;
+  background-color: #1A1D25;
 `
 
 const InputContainer = styled.View`
@@ -106,7 +123,7 @@ const InputContainer = styled.View`
 `;
 
 const InputTitle = styled.Text`
-  color: #3F4446;
+  color: #fff;
   text-align: center;
   font-family: SUIT;
   font-size: 14px;
@@ -125,7 +142,7 @@ const InputListCard = styled.View`
   gap: 40px;
 
   border-radius: 8px;
-  background: #FAFAFA;
+  background-color: #212632;
 `
 
 const DateInputBox = styled.TouchableOpacity`
@@ -136,8 +153,7 @@ const DateInputBox = styled.TouchableOpacity`
   gap: 20px;
   align-self: stretch;
   border-radius: 6px;
-  border: 1px solid #EDEDED;
-  background: #F5F5F5;
+  background-color: #181C25;
   flex-direction: row;
 `;
 
@@ -147,22 +163,22 @@ const MoneyInputBox = styled.TextInput`
   justify-content: center;
   align-self: stretch;
   border-radius: 6px;
-  border: 1px solid #EDEDED;
-  background: #F5F5F5;
-  flex-direction: row;
-  text-align-vertical: center;
-  text-align: center; /* 수정된 부분 */
+  background-color: #181C25;
+  text-align: center;
+  font-family: SUIT;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
 `;
 
 const DateText = styled.Text`
-  color: #525759;
+  color: #fff;
   text-align: center;
   font-family: SUIT;
   font-size: 22px;
   font-style: normal;
   font-weight: 600;
-
-  letter-spacing: -0.4px;`
+`
 
 const MainContainer = styled.View`
   display: flex;
@@ -170,12 +186,10 @@ const MainContainer = styled.View`
   height: 100%;
   padding: 16px 0px;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   gap: 20px;
   flex-shrink: 0;
 `
-
-
 
 export default AccountBookInput;
