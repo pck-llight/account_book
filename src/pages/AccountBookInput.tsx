@@ -1,11 +1,14 @@
 import 'react-native-gesture-handler';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components/native";
 import Header from "../components/Header.tsx";
 import AccountTypeButton from "../components/AccountTypeButton.tsx";
 import DatePicker from 'react-native-date-picker'
 import {useNavigation} from "@react-navigation/native";
 import InputButton from "../components/InputButton.tsx";
+import {useAtom} from "jotai";
+import {dataAtom} from "../store/Data.tsx";
+import {ToastAndroid} from "react-native";
 
 const AccountBookInput = () => {
     const navigation = useNavigation();
@@ -13,12 +16,43 @@ const AccountBookInput = () => {
     //Date 모달 관련 상태
     const [date, setDate] = useState<Date>(new Date());
     const [open, setOpen] = useState(false)
-
-    //수입 지출
+    // 수입 지출
     const [accountType, setType] = useState<string>("수입");
-
-    //현재 돈
+    //사용처 입력 값
+    const [usage, setUsage] = useState<string>("")
+    // 현재 돈
     const [money, setMoney] = useState("");
+
+    const [data, setData] = useAtom(dataAtom)
+
+    const [buttonState, setState] = useState<string>("수입");
+
+    function pressInputButton() {
+        // 저장 하는 기능을 이제 추가 해서 여기에 넣어야 겠죠?그죠?그렇겠죠? 진짜네..
+        // 입력이 올바른지 판별하는 것도 필요하겠죠?
+        if (usage && money && data) {
+            setData(
+                [...data, {
+                    date: date,
+                    price: Number(money),
+                    usage: usage,
+                    isPlus: buttonState === "수입"
+                }]
+            )
+            navigation.goBack();
+        } else {
+            ToastAndroid.showWithGravityAndOffset(
+                "입력을 확인 해주세요",
+                ToastAndroid.TOP,
+                ToastAndroid.SHORT,
+                20, 250
+            )
+        }
+    }
+
+    useEffect(() => {
+        console.log(data)
+    }, [data]);
 
 
     let secondInputQ;
@@ -31,10 +65,6 @@ const AccountBookInput = () => {
         secondInputQ = "언제의 지출인가요?";
         thirdInputQ = "얼마만큼의 지출인가요?";
     }
-
-    const typeStateCallback = (title: string) => {
-        setType(title);
-    };
 
     const DataModal = () => {
         return (
@@ -80,7 +110,14 @@ const AccountBookInput = () => {
                 <InputListCard>
                     <InputContainer>
                         <InputTitle>수입인가요? 지출인가요?</InputTitle>
-                        <AccountTypeButton stateCallback={typeStateCallback}/>
+                        <AccountTypeButton buttonState={buttonState} setState={setState}/>
+                    </InputContainer>
+                    <InputContainer>
+                        <InputTitle>사용처가 어디인가요?</InputTitle>
+                        <MoneyInputBox value={usage} placeholder={"사용처 입력"}
+                                       placeholderTextColor={"rgba(255,255,255,0.31)"} onChangeText={(text) => {
+                            setUsage(text)
+                        }}/>
                     </InputContainer>
                     <InputContainer>
                         <InputTitle>{secondInputQ}</InputTitle>
@@ -98,9 +135,7 @@ const AccountBookInput = () => {
                 </InputListCard>
                 <DataModal/>
                 <InputButton title={"수입 / 지출 입력"} onPress={() => {
-                    navigation.goBack();
-                    // 저장 하는 기능을 이제 추가 해서 여기에 넣어야 겠죠?그죠?그렇겠죠? 진짜네..
-                    // 입력이 올바른지 판별하는 것도 필요하겠죠?
+                    pressInputButton()
                 }}/>
             </MainContainer>
         </Screen>

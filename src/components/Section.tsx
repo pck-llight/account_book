@@ -1,23 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components/native";
-import {View} from "react-native";
+import {TouchableOpacity, View} from "react-native";
 
 interface SectionProps {
     title: string,
     date: string,
     priceColor: string,
-    price: string,
+    price: number,
     isMinous?: boolean
 }
 
 const Section = ({title, date, priceColor, price, isMinous}: SectionProps) => {
-    const [priceOutput, setPriceOutput] = useState<String>(price.toLocaleString().toString())
+    const [priceOutput, setPriceOutput] = useState<String>(price.toLocaleString())
 
     useEffect(() => {
         setPriceOutput(price.toLocaleString())
     }, [price]);
     return (
-        <View style={{
+        <TouchableOpacity onLongPress={()=>{
+
+        }} style={{
             // flex: 1,
             alignItems: "center",
             flexDirection: "row",
@@ -31,10 +33,10 @@ const Section = ({title, date, priceColor, price, isMinous}: SectionProps) => {
                 paddingVertical:14,
             }}>
                 <SectionTitle>{title}</SectionTitle>
-                <Date>{date}</Date>
+                <Date>{String(date)}</Date>
             </View>
-            <Subtitle style={{color: priceColor}}>{isMinous && "-"} {priceOutput}</Subtitle>
-        </View>
+            <Subtitle style={{color: priceColor}}>{isMinous && "-"} {priceOutput} 원</Subtitle>
+        </TouchableOpacity>
 
     );
 };
@@ -56,7 +58,6 @@ const Subtitle = styled.Text`
   text-align: center;
   font-family: SUIT;
   font-size: 18px;
-  font-style: normal;
   font-weight: 700;
 `
 export default Section;

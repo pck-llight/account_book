@@ -7,44 +7,28 @@ import InputButton from "../components/InputButton.tsx";
 import {SafeAreaView, View} from "react-native";
 import Section from "../components/Section.tsx";
 import {useNavigation} from '@react-navigation/native';
-import AccountBookInput from "./AccountBookInput.tsx";
-import IncomeList from "./IncomeList.tsx";
-import ExpendList from "./ExpendList.tsx";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import {useAtom} from "jotai";
+import {dataAtom} from "../store/Data.tsx";
 
 const Home = () => {
     const [currentCash, setCurrentCash] = useState<number>(0)
-    const [income, setIncome] = useState<number>(0)
-    const [expend, setExpend] = useState<number>(0)
+    const [income, setIncome] = useState<string>("0")
+    const [expend, setExpend] = useState<string>("0")
     const navigation = useNavigation();
-
-    const date1 = new Date(2024, 2, 27, 0, 0, 0, 0)
+    const [data, setData] = useAtom(dataAtom)
 
     useEffect(() => {
-        setCurrentCash(income - expend)
-    }, [income, expend])
+        // isPlus가 참인 아이템들의 합계를 계산하여 income 상태 업데이트
+        const plusItems = data.filter(item => item.isPlus);
+        const totalIncome = plusItems.reduce((acc, item) => acc + item.price, 0);
+        setIncome(totalIncome.toLocaleString());
+        const MinousItems = data.filter(item => !item.isPlus);
+        const totalExpend = MinousItems.reduce((acc, item) => acc + item.price, 0);
+        setExpend(totalExpend.toLocaleString());
 
-    const storeData = async () => {
-        try {
-            await AsyncStorage.setItem('1', "123123123");
-        } catch (e) {
-            // saving error
-        }
-    };
+        setCurrentCash(totalIncome - totalExpend)
+    }, [data]); // data가 변경될 때마다 호출
 
-    const getData = async (key: string) => {
-        try {
-            const value = await AsyncStorage.getItem(key);
-            if (value !== null) {
-                return value
-            }
-        } catch (e) {
-            // error reading value
-        }
-    };
-
-    const [대충 이따가 키랑 벨류 리스트 만들어서 관리해 아랐지?]
 
     return <SafeAreaView style={{
         flex: 1,
@@ -59,20 +43,18 @@ const Home = () => {
             }}>
                 <SectionTop>나의 자산 현황</SectionTop>
                 <CashContainer>
-                    <CashCard full title={"현금 자산 총액"} subtitle={currentCash + "원"} subtitleColor={"#fff"}
-                              disabled={true} onPress={() => {
-                        console.log("뭐야 왜 돼")
-                    }}/>
+                    <CashCard full title={"현금 자산 총액"} subtitle={currentCash.toLocaleString() + " 원"} subtitleColor={"#fff"}
+                              disabled={true}/>
                     <IncomeAndOutputContainer>
-                        <CashCard title={"이번 달 총 수입"} subtitle={income + "원"} subtitleColor={"#fff"}
+                        <CashCard title={"이번 달 총 수입"} subtitle={income + " 원"} subtitleColor={"#fff"}
                                   iconVisible={true} onPress={() => {
                             console.log("총 수입")
-                            navigation.navigate(IncomeList)
+                            navigation.navigate("IncomeList")
                         }}/>
-                        <CashCard title={"이번 달 총 지출"} subtitle={expend + "원"} subtitleColor={"#F6453A"}
+                        <CashCard title={"이번 달 총 지출"} subtitle={expend + " 원"} subtitleColor={"#F6453A"}
                                   iconVisible={true} onPress={() => {
                             console.log("총 지출")
-                            navigation.navigate(ExpendList)
+                            navigation.navigate("ExpendList")
                         }}/>
                     </IncomeAndOutputContainer>
                 </CashContainer>
@@ -80,14 +62,18 @@ const Home = () => {
                 <ScrollView style={{
                     flex: 1,
                     paddingVertical: 14,
-                    // paddingHorizontal: 20,
                     marginBottom: 54
                 }}>
-                    <Section title={"aa"} date={date1.toDateString()} priceColor={"#fff"} price={}/>
+                    {data.map((item) => {
+                        return <Section title={item.usage}
+                                        date={item.date.getFullYear() + '.' + item.date.getMonth() + '.' + item.date.getDate()}
+                                        priceColor={item.isPlus ? "#fff" : "#F6453A"} price={item.price}
+                                        isMinous={!item.isPlus}/>
+                    })}
                 </ScrollView>
             </View>
             <InputButton title={"수입 / 지출 입력"} onPress={() => {
-                navigation.navigate(AccountBookInput);
+                navigation.navigate("AccountBookInput");
             }}/>
         </View>
     </SafeAreaView>;

@@ -4,7 +4,7 @@ interface ButtonProps {
     title: string;
     subtitle?: string;
     subtitleColor: string;
-    onPress: () => void;
+    onPress?: () => void;
     disabled?: boolean;
     full?:boolean;
     iconVisible?:boolean;

@@ -1,18 +1,17 @@
 import styled from "styled-components/native";
 
-import React, {useState} from "react";
+import React, {SetStateAction, useEffect, useState} from "react";
 interface ButtonProps {
     title: string;
 }
 
 interface ButtonFieldProps{
-    stateCallback: (title: string) => void;
+    buttonState:string
+    setState: React.Dispatch<SetStateAction<string>>
 }
 
 
-const AccountTypeButton : React.FC<ButtonFieldProps> = ({ stateCallback }) => {
-
-    const [buttonState, setState] = useState<string>("수입");
+const AccountTypeButton : React.FC<ButtonFieldProps> = ({ buttonState, setState}) => {
 
     const Button: React.FC<ButtonProps> = ({ title }) => {
         let buttonBackgroundColor; // 기본 배경색 설정
@@ -27,7 +26,6 @@ const AccountTypeButton : React.FC<ButtonFieldProps> = ({ stateCallback }) => {
         }
         return(
             <ButtonContainer onPress={()=>{
-                stateCallback(title)
                 setState(title)
             }} style={{ backgroundColor: buttonBackgroundColor }} >
                 <ButtonText style={{ color: buttonTextColor }}>
